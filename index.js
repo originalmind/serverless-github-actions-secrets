@@ -83,7 +83,7 @@ if (!options.stage) {
 
 // Resolve config file
 if (options.configFilePattern) {
-  configFile = path.join(
+  configFile = path.resolve(
     options.configPath,
     options.configFilePattern.replace('{stage}', options.stage)
   );
