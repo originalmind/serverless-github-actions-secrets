@@ -1,0 +1,26 @@
+{
+  "name": "test-package",
+  "description": "",
+  "version": "0.1.0",
+  "dependencies": {},
+  "devDependencies": {
+    "husky": "^4.2.5",
+    "serverless-domain-manager": "^3.3.1",
+    "serverless-github-actions-secrets": "git+https://github.com/originalmind/serverless-github-actions-secrets.git#master",
+    "serverless-python-requirements": "^5.1.0",
+    "serverless-wsgi": "^1.7.4"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "secrets": "github-secrets"
+  },
+  "om_sgas": {
+    "stage_mapping": {
+      "master": "dev"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/example/test.git"
+  }
+}
