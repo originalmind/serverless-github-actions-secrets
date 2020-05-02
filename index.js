@@ -5,7 +5,8 @@ const fs = require("fs"),
   github = require("./lib/github"),
   packageReader = require("./lib/package-reader"),
   util = require('util'),
-  debuglog = util.debuglog('app');
+  debuglog = util.debuglog('app'),
+  path = require('path');
 
 const optionDefinitions = [
   {
@@ -27,6 +28,20 @@ const optionDefinitions = [
     description: "Deployment stage, e.g. dev, staging, prod",
   },
   {
+    name: "configPath",
+    alias: "c",
+    type: String,
+    description: "Path to serverless config file",
+    default: "."
+  },
+  {
+    name: "configFilePattern",
+    alias: "f",
+    type: String,
+    description: "Match pattern for serverless config file containing values to write to GitHub Actions Secrets. Replace tokens supported: {stage}",
+    default: "serverless.yml"
+  },
+  {
     name: "operation",
     alias: "o",
     type: String,
@@ -46,6 +61,9 @@ const optionDefinitions = [
     description: "AWS profile name from credentials file",
   },
 ];
+
+var configFile = '';
+
 const options = cla(optionDefinitions);
 
 if (!options.token) {
@@ -63,13 +81,23 @@ if (!options.stage) {
   options.stage = new packageReader().getStage();
 }
 
-debuglog(`Running with options: ${options.token} ${options.repo} ${options.stage}`);
+// Resolve config file
+if (options.configFilePattern) {
+  configFile = path.join(
+    options.configPath,
+    options.configFilePattern.replace('{stage}', options.stage)
+  );
+}
+
+var tokenRedacted = options.token.replace(/(\w{5})\w+/, '$1xxxxxxxxxx');
+
+debuglog(`Running with options: ${tokenRedacted} ${options.repo} ${options.stage} ${configFile}`);
 
 const gitHubAPI = new github(options.token, options.repo);
 
+
 switch (options.operation) {
   case "write": {
-    const configFile = `../../sls/config/config.${options.stage}.secret.yml`;
     console.log("Reading " + configFile);
 
     const configDoc = yaml.parse(fs.readFileSync(configFile, "utf8"));
