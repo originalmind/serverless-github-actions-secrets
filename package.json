@@ -1,6 +1,6 @@
 {
-  "name": "github-deploy",
-  "version": "1.0.0",
+  "name": "serverless-github-actions-secrets",
+  "version": "0.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
