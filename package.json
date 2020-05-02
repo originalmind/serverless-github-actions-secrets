@@ -7,6 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "node index.js"
   },
+  "bin": {
+    "github-secrets": "./bin/run.js"
+  },
   "author": "",
   "license": "ISC",
   "devDependencies": {},
