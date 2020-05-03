@@ -1,7 +1,7 @@
 {
   "name": "serverless-github-actions-secrets",
-  "version": "0.4.1",
-  "description": "",
+  "version": "0.4.2",
+  "description": "Sync secret config values to GitHub Actions Secrets",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
