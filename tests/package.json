@@ -15,6 +15,10 @@
     "secrets": "github-secrets"
   },
   "om_sgas": {
+    "configFile": {
+      "configPath": "./config",
+      "configFilePattern": "config.{stage}.secret.yml"
+    },
     "stage_mapping": {
       "master": "dev"
     }

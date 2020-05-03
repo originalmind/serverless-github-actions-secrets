@@ -31,15 +31,13 @@ const optionDefinitions = [
     name: "configPath",
     alias: "c",
     type: String,
-    description: "Path to serverless config file",
-    default: "."
+    description: "Path to serverless config file"
   },
   {
     name: "configFilePattern",
     alias: "f",
     type: String,
-    description: "Match pattern for serverless config file containing values to write to GitHub Actions Secrets. Replace tokens supported: {stage}",
-    default: "serverless.yml"
+    description: "Match pattern for serverless config file containing values to write to GitHub Actions Secrets. Replace tokens supported: {stage}"
   },
   {
     name: "operation",
@@ -65,6 +63,7 @@ const optionDefinitions = [
 var configFile = '';
 
 const options = cla(optionDefinitions);
+const pkg = new packageReader();
 
 if (!options.token) {
   if (!process.env.GITHUB_ACCESS_TOKEN) {
@@ -74,20 +73,28 @@ if (!options.token) {
 }
 
 if (!options.repo) {
-  options.repo = new packageReader().getRepo();
+  options.repo = pkg.getRepo();
 }
 
 if (!options.stage) {
-  options.stage = new packageReader().getStage();
+  options.stage = pkg.getStage();
+}
+
+if (!options.configPath) {
+  // Read pattern from package.json
+  options.configPath = pkg.getConfigPath();
+}
+
+if (!options.configFilePattern) {
+  // Read pattern from package.json
+  options.configFilePattern = pkg.getConfigFilePattern();
 }
 
 // Resolve config file
-if (options.configFilePattern) {
-  configFile = path.resolve(
-    options.configPath,
-    options.configFilePattern.replace('{stage}', options.stage)
-  );
-}
+configFile = path.resolve(
+  options.configPath,
+  options.configFilePattern.replace('{stage}', options.stage)
+);
 
 var tokenRedacted = options.token.replace(/(\w{5})\w+/, '$1xxxxxxxxxx');
 
