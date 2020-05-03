@@ -15,6 +15,10 @@
     "secrets": "github-secrets"
   },
   "om_sgas": {
+    "secretNaming": {
+      "prefixWithStage": false,
+      "prefixSeparator": "_"
+    },
     "configFile": {
       "configPath": "./config",
       "configFilePattern": "config.{stage}.secret.yml"

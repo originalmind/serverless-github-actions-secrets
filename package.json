@@ -1,6 +1,6 @@
 {
   "name": "serverless-github-actions-secrets",
-  "version": "0.4.3",
+  "version": "0.5.0",
   "description": "Sync secret config values to GitHub Actions Secrets",
   "main": "index.js",
   "scripts": {

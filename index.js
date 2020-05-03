@@ -40,6 +40,18 @@ const optionDefinitions = [
     description: "Match pattern for serverless config file containing values to write to GitHub Actions Secrets. Replace tokens supported: {stage}"
   },
   {
+    name: "prefixWithStage",
+    alias: "w",
+    type: Boolean,
+    description: "If true, secret names will be prefixed by {stage}{separator}"
+  },
+  {
+    name: "prefixSeparator",
+    alias: "e",
+    type: String,
+    description: "Separator between prefix and secret name"
+  },
+  {
     name: "operation",
     alias: "o",
     type: String,
@@ -81,13 +93,24 @@ if (!options.stage) {
 }
 
 if (!options.configPath) {
-  // Read pattern from package.json
   options.configPath = pkg.getConfigPath();
 }
 
 if (!options.configFilePattern) {
-  // Read pattern from package.json
   options.configFilePattern = pkg.getConfigFilePattern();
+}
+
+if (!options.prefixWithStage) {
+  options.prefixWithStage = pkg.getPrefixWithStage();
+}
+
+if (!options.prefixSeparator) {
+  options.prefixSeparator = pkg.getPrefixSeparator();
+}
+
+var prefix = '';
+if (options.prefixSeparator) {
+  prefix = `${options.stage}${options.prefixSeparator}`;
 }
 
 // Resolve config file
@@ -100,7 +123,11 @@ var tokenRedacted = options.token.replace(/(\w{5})\w+/, '$1xxxxxxxxxx');
 
 debuglog(`Running with options: ${tokenRedacted} ${options.repo} ${options.stage} ${configFile}`);
 
-const gitHubAPI = new github(options.token, options.repo);
+const gitHubAPI = new github({
+  token: options.token,
+  repoPath: options.repo,
+  prefix: prefix
+});
 
 
 switch (options.operation) {
