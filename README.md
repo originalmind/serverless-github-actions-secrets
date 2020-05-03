@@ -28,15 +28,21 @@ Since you're using Github Actions, it's a good idea to push the secrets before p
 
 Since we can't specify a stage, we must map it from the current branch. This is specified in the package.json. This package will read this metadata if the `--stage` option is not specified.
 
+You must also specify where your config file is by setting this in the package.json as shown below.
+
 1. `npm i husky --save-dev`
 2. Add required metadata to package.json:
    ```
 	"husky": {
 		"hooks": {
-		  "pre-push": "github-secrets",
+		  "pre-push": "npm run secrets -- --operation write"
 		}
 	},
 	"om_sgas": {
+	  "configFile": {
+        "configPath": "./config",
+        "configFilePattern": "config.{stage}.secret.yml"
+      },
       "stage_mapping": {
 		"develop": "dev",
         "master": "prod"
