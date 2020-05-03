@@ -144,6 +144,10 @@ switch (options.operation) {
     gitHubAPI.getSecret(options.secretName);
     break;
   }
+  case "connect": {
+    gitHubAPI.connect();
+    break;
+  }
   default: {
     console.log("No operation specified");
     break;
