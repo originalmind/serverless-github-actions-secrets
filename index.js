@@ -178,6 +178,14 @@ switch (options.operation) {
     gitHubAPI.getSecret(options.secretName);
     break;
   }
+  case "delete": {
+    if (!options.secretName) {
+      console.error('Secret name must be specified for operation type "delete"');
+      process.exit();
+    }
+    gitHubAPI.deleteSecret(options.secretName);
+    break;
+  }
   case "connect": {
     gitHubAPI.connect();
     break;
