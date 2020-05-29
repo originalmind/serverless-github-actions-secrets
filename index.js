@@ -89,7 +89,14 @@ if (!options.repo) {
 }
 
 if (!options.stage) {
-  options.stage = pkg.getStage();
+  try {
+    options.stage = pkg.getStage();
+  } catch (e) {
+    console.log(e);
+    options.stage = null;
+    console.log("Stage not available - exiting...");
+    process.exit();
+  }
 }
 
 if (!options.configPath) {
