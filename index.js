@@ -126,7 +126,7 @@ if (!options.prefixSeparator) {
 }
 
 var prefix = '';
-if (options.prefixSeparator) {
+if (options.prefixWithStage && options.prefixSeparator) {
   prefix = `${options.stage}${options.prefixSeparator}`;
 }
 

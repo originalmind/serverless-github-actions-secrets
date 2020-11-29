@@ -4,6 +4,8 @@ Manage Serveless Framework config values in GitHub Actions Secrets
 
 ## Basic Usage - Writing Secrets to GitHub Actions
 
+You will need to create a GitHub personal access token with 
+
 1. Add a script entry to your package.json:
 
    ```
