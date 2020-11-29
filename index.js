@@ -55,14 +55,19 @@ const optionDefinitions = [
     name: "operation",
     alias: "o",
     type: String,
-    description: "One of: write, list, get, cred",
+    description: "One of: write, writeOne, list, get, cred",
     default: "write",
   },
   {
     name: "secretName",
     alias: "n",
     type: String,
-    description: "GitHub secret name",
+    description: "GitHub secret name (for writeOne)",
+  },
+  {
+    name: "secret-value",
+    type: String,
+    description: "GitHub secret value (for writeOne)",
   },
   {
     name: "awsProfileName",
@@ -146,6 +151,11 @@ switch (options.operation) {
     Object.keys(configDoc).forEach((configKey) => {
       gitHubAPI.writeToGitHub(configKey, configDoc[configKey]);
     });
+
+    break;
+  }
+  case "writeOne": {
+    gitHubAPI.writeToGitHub(configKey, configDoc[configKey]);
 
     break;
   }
