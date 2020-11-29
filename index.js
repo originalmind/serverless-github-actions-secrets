@@ -40,6 +40,11 @@ const optionDefinitions = [
     description: "Match pattern for serverless config file containing values to write to GitHub Actions Secrets. Replace tokens supported: {stage}"
   },
   {
+    name: "noConfigFile",
+    type: Boolean,
+    description: "If true, config file is ignored"
+  },
+  {
     name: "prefixWithStage",
     alias: "w",
     type: Boolean,
@@ -65,7 +70,7 @@ const optionDefinitions = [
     description: "GitHub secret name (for writeOne)",
   },
   {
-    name: "secret-value",
+    name: "secretValue",
     type: String,
     description: "GitHub secret value (for writeOne)",
   },
@@ -104,11 +109,11 @@ if (!options.stage) {
   }
 }
 
-if (!options.configPath) {
+if (!options.noConfigFile && !options.configPath) {
   options.configPath = pkg.getConfigPath();
 }
 
-if (!options.configFilePattern) {
+if (!options.noConfigFile && !options.configFilePattern) {
   options.configFilePattern = pkg.getConfigFilePattern();
 }
 
@@ -125,15 +130,17 @@ if (options.prefixSeparator) {
   prefix = `${options.stage}${options.prefixSeparator}`;
 }
 
-// Resolve config file
-configFile = path.resolve(
-  options.configPath,
-  options.configFilePattern.replace('{stage}', options.stage)
-);
+// Resolve config file if options allow
+if (!options.noConfigFile) {
+  configFile = path.resolve(
+    options.configPath,
+    options.configFilePattern.replace('{stage}', options.stage)
+  );
+}
 
 var tokenRedacted = options.token.replace(/(\w{5})\w+/, '$1xxxxxxxxxx');
 
-debuglog(`Running with options: ${tokenRedacted} ${options.repo} ${options.stage} ${configFile}`);
+debuglog(`Running with options: ${tokenRedacted} ${options.repo} ${options.stage} ${options.noConfigFile} ${configFile}`);
 
 const gitHubAPI = new github({
   token: options.token,
@@ -155,7 +162,7 @@ switch (options.operation) {
     break;
   }
   case "writeOne": {
-    gitHubAPI.writeToGitHub(configKey, configDoc[configKey]);
+    gitHubAPI.writeToGitHub(options.secretName, options.secretValue);
 
     break;
   }
